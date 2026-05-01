@@ -29,8 +29,8 @@
 
 ---
 
-**Distilled from 2+ years of Kaggle competition experience**
-**提炼自 2+ 年 Kaggle 竞赛实战经验**
+**Distilled from real Kaggle competition experience**
+**提炼自 真实 Kaggle 竞赛实战经验**
 
 Including: **RL Game AI** • **Audio Classification** • **LLM Reasoning** • Multiple debugging journeys
 包括：**强化学习游戏 AI** • **音频分类** • **LLM 推理** • 多次调试实践
