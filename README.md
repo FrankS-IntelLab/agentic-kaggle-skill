@@ -74,14 +74,7 @@ Then in your AI agent / 然后在你的 AI 智能体中：
 
 ## 💡 Key Insights / 核心洞察
 
-### 1️⃣ Score Stabilization Pattern / 分数稳定模式
 
-**Don't trust early scores! / 不要相信早期分数！**
-
-| Time 时间 | Score 分数 | Reality 真相 |
-|------|-------|---------|
-| 0-2h | Peak 峰值 (800-1000) | ⚠️ **Inflated 虚高** — lucky matchups 幸运匹配 |
-| 4h+ | Stable 稳定 (600-800) | ✅ **True score 真实分数** |
 
 ### 2️⃣ Competition Types Matter / 竞赛类型很重要
 
