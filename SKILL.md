@@ -64,17 +64,11 @@ kaggle kernels status <username>/<kernel-name>
 
 **Critical insight**: Kaggle scores take time to stabilize after submission.
 
-| Time | Score Behavior | What To Do |
-|------|----------------|------------|
-| Start | ~600 baseline | Submit early to start battles |
-| +2 hours | Peak (800-1000) | **Don't trust!** Artificially inflated |
-| +4 hours | Stabilized (600-800) | **True score** — make decisions now |
-
-### Example: RL Game Competition
-
-- Scores start at ~600 baseline
-- Peak at 800-1000 after ~2 hours
-- Regress to 600-800 after 4+ hours
+|| Time | Score Behavior | What To Do ||
+|------|----------------|------------||
+| Start | Baseline | Submit early to start evaluation ||
+| +2 hours | Peak (inflated) | **Don't trust!** Often artificially high ||
+| +4 hours | Stabilized | **True score** — make decisions now ||
 
 **Lesson**: Never celebrate early highs. Wait 4+ hours before judging performance.
 
@@ -274,13 +268,11 @@ if not test_files:
     submission.to_csv("submission.csv", index=False)
 ```
 
-### 2. Over-engineering Game Agents
+### 2. Game AI Competitions Require Comprehensive Features
 
-**Lesson from RL Game Competition**:
-- Top agents: 1,895-3,308 lines, 12/12 features → LB 958-1224
-- Simplified agents: ~120 lines, 4/12 features → LB 486-600
+**Pattern observed**: Top-performing game agents often require comprehensive feature implementations.
 
-**Takeaway**: Don't oversimplify game AI agents. Full feature sets are needed to compete.
+**Takeaway**: Don't oversimplify game AI agents. Study top solutions to understand the full feature set needed to compete.
 
 ### 3. Double File Extension
 
@@ -337,7 +329,10 @@ After submitting:
 
 ## Related Skills
 
-- `kaggle-auto-submit` — End-to-end automation with cronjob monitoring
-- `autonomous-iteration` — ANALYSIS → BUILD → EXPERIMENT → REVIEW loops
-- `opencode` — Delegate coding to OpenCode CLI
-- `claude-code` — Delegate coding to Claude Code CLI
+| Skill | Purpose |
+|-------|---------|
+| `agentic-competition-workflow` | Git-first project management, validation pipelines, full competition lifecycle |
+| `kaggle-auto-submit` | End-to-end automation with cronjob monitoring |
+| `autonomous-iteration` | ANALYSIS → BUILD → EXPERIMENT → REVIEW loops |
+| `opencode` | Delegate coding to OpenCode CLI |
+| `claude-code` | Delegate coding to Claude Code CLI |

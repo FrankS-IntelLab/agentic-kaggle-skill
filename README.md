@@ -193,7 +193,8 @@ agentic-kaggle-skill/
 ## 🔗 Related Skills / 相关 Skills
 
 | Skill | Purpose 用途 |
-|-------|---------|
+|-------|-------------|
+| `agentic-competition-workflow` | Git-first project management, validation pipelines Git 项目管理，验证流程 |
 | `kaggle-auto-submit` | End-to-end automation with cronjob 端到端自动化 |
 | `autonomous-iteration` | ANALYSIS → BUILD → EXPERIMENT → REVIEW 分析→构建→实验→审查 |
 | `opencode` | Delegate coding to OpenCode CLI 委托编码 |

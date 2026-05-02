@@ -13,18 +13,17 @@ Kaggle scores are not instant — they take time to stabilize due to:
 - Running battles against other agents (game competitions)
 - Averaging over multiple episodes
 
-### Observed Pattern (Game Competition)
+### Observed Pattern
 
 | Time Since Submission | Score | Interpretation |
 |-----------------------|-------|----------------|
-| 0-1 hours | ~600 | Baseline, early episodes |
-| 1-2 hours | 800-1000 | **Inflated** — favorable matchups |
-| 2-4 hours | 700-900 | Regressing toward true value |
-| 4+ hours | 600-800 | **Stabilized** — true competitive score |
+| 0-2 hours | Peak (inflated) | **Don't trust!** Favorable conditions |
+| 2-4 hours | Regressing | Moving toward true value |
+| 4+ hours | Stabilized | **True competitive score** |
 
 ### Why Early Scores Are Inflated
 
-1. **Lucky matchups**: Initial battles may be against weaker agents
+1. **Lucky matchups**: Initial evaluations may be against weaker opponents
 2. **Small sample size**: Few episodes = high variance
 3. **Rating system inertia**: ELO-like systems need time to converge
 
@@ -159,7 +158,7 @@ When analyzing top notebooks:
 
 ### Daily Limits
 
-Some competitions have daily submission limits (e.g., 5 per day).
+Some competitions have daily submission limits.
 
 ### Strategy
 

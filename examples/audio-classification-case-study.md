@@ -10,7 +10,6 @@ Audio classification competition for species identification from sound recording
 - **Task**: Identify species from audio recordings
 - **Evaluation**: Macro-averaged AUC
 - **Data**: Training audio, test soundscapes
-- **Location**: Specific geographic region
 
 ---
 
@@ -62,13 +61,13 @@ kaggle kernels push -p ./solution/
 
 ### 4. Hybrid Approach: Temporal Model + SED
 
-**Best approach**: Ensemble of two techniques
+**Best approach**: Ensemble of complementary techniques
 - **Temporal Model**: Temporal modeling with embeddings
 - **SED**: Sound Event Detection with CNN
 
-**Ensemble weights**: 60% Temporal + 40% SED (rank-averaging)
+**Ensemble method**: Rank-averaging with tuned weights
 
-**Result**: Top leaderboard position
+**Result**: Improved leaderboard position
 
 ---
 
@@ -76,7 +75,7 @@ kaggle kernels push -p ./solution/
 
 ### Issue 1: Silent Feature Extraction Failures
 
-**Problem**: 10,000 samples yielded 0 embeddings
+**Problem**: Many samples yielded no embeddings
 
 **Cause**: Exception silently caught without logging
 
@@ -164,23 +163,10 @@ def rank_average(preds1, preds2, weights=[0.6, 0.4]):
 
 ---
 
-## Results
-
-| Version | Approach | CV Score | LB Score |
-|---------|----------|----------|----------|
-| V1 | Uniform baseline | — | 0.500 |
-| V5 | Location priors | — | 0.500 (no improvement) |
-| V10 | Embeddings | 0.910 | 0.910 |
-| V15 | Temporal model | 0.920 | 0.923 |
-| V19 | Temporal + tuning | 0.925 | 0.927 |
-| V21 | Temporal + SED ensemble | 0.930 | 0.935 |
-
----
-
 ## Key Takeaways
 
 1. **Use actual features, not just priors** — priors don't help when all samples are similar
 2. **Check file path format** — filename column may already include extensions
 3. **Never use training data as fallback** — use sample_submission.csv instead
-4. **Ensemble complementary approaches** — Temporal + SED worked better than either alone
+4. **Ensemble complementary approaches** — Different techniques often work better together
 5. **Replicate top notebooks** — pull with `-m` flag to get all dependencies
