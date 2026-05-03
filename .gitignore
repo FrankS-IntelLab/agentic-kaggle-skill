@@ -1,0 +1,28 @@
+# Data files
+data/
+*.csv
+*.parquet
+*.ogg
+*.wav
+*.zip
+
+# Outputs
+logs/
+output/
+*.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Large files
+*.onnx
+*.pt
+*.pth
+*.safetensors

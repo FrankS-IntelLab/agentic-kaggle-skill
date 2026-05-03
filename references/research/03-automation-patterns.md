@@ -349,3 +349,151 @@ kaggle competitions leaderboard <name> -s | head -15
 3. **Log everything** in kernels for debugging
 4. **Verify submissions** before declaring success
 5. **Document lessons** in SPEC.md for future reference
+
+---
+
+## Tiered Opponent System
+
+For game/RL competitions, use progressive difficulty testing to systematically validate agents.
+
+### Tier Structure
+
+```python
+OPPONENT_TIERS = {
+    "tier_1_starters": {
+        "description": "Initial opponents - target 95%+ win rate",
+        "win_rate_target": 0.95,
+        "opponents": ["baseline_agent", "random_agent"]
+    },
+    "tier_2_intermediate": {
+        "description": "Intermediate opponents - target 70%+ win rate",
+        "win_rate_target": 0.70,
+        "opponents": ["historical_best", "community_agent"]
+    },
+    "tier_3_advanced": {
+        "description": "Advanced opponents - target 55%+ win rate",
+        "win_rate_target": 0.55,
+        "opponents": ["top_opensource_agent"]
+    }
+}
+```
+
+### Progressive Flow
+
+```
+Test vs Tier 1 (baseline, random) → 95% pass →
+Add Tier 2 opponents → 70% pass →
+Add Tier 3 opponents → 55% pass →
+READY TO SUBMIT ✅
+```
+
+### Key Principle
+
+Start with easier opponents to validate basic competence, then progressively test against harder opponents. Only submit when ALL tiers are passed.
+
+---
+
+## Auto-Fix Loops
+
+Self-healing pipelines that detect errors, diagnose, fix, and re-run automatically.
+
+### Pattern: Monitor → Detect → Fix → Push → Repeat
+
+```python
+# Cronjob prompt pattern
+"""
+Monitor and fix the notebook until it runs successfully.
+
+1. Check kernel status
+2. If ERROR:
+   - Download logs
+   - Identify specific error (ImportError, NameError, etc.)
+   - Fix the notebook file
+   - Push fix
+   - Report what was fixed
+3. If COMPLETE:
+   - Verify success marker
+   - Create flag file and stop
+4. Continue until success or max retries
+"""
+```
+
+### Common Fixes
+
+| Error | Diagnosis | Fix |
+|-------|-----------|-----|
+| Unknown Environment | Wrong environment name | Check correct name |
+| ImportError | Missing package | Add offline installation |
+| NameError | Undefined variable | Fix typo or add import |
+| File not found | Wrong path | Check data path format |
+
+### Key Mindset
+
+The pipeline must **never stop after failure**. Always diagnose → fix → re-run. User should never have to prompt "why isn't it running?"
+
+---
+
+## Offline Package Installation
+
+When competitions disable internet, install packages from Kaggle datasets.
+
+### Pattern
+
+```python
+import subprocess
+import sys
+from pathlib import Path
+
+# Find wheel files in attached dataset
+wheel_files = list(Path('/kaggle/input/dataset-name').glob('*.whl'))
+if wheel_files:
+    subprocess.check_call([
+        sys.executable, "-m", "pip", "install", "-q",
+        "--no-index",
+        "--find-links", str(wheel_files[0].parent),
+        "package_name"
+    ])
+```
+
+### Workflow
+
+1. Create a Kaggle dataset with required wheel files (using a notebook with internet)
+2. Attach dataset to competition kernel
+3. Install offline with `--no-index --find-links`
+
+### Key Insight
+
+Always check if competition requires internet disabled. If so, pre-prepare offline packages.
+
+---
+
+## Data Leakage Detection
+
+Before building solutions, check if test answers exist in training data.
+
+### Quick Check Pattern
+
+```python
+import pandas as pd
+
+test = pd.read_csv('test.csv')
+train = pd.read_csv('train.csv')
+
+for idx, row in test.iterrows():
+    test_prompt = row['prompt']  # or relevant column
+    for _, train_row in train.iterrows():
+        if train_row['prompt'] == test_prompt:
+            print(f"Found answer for test row {idx}")
+            print(f"Answer: {train_row['answer']}")
+            break
+```
+
+### Why This Matters
+
+- Saves hours if answers are directly available
+- Changes approach from model-building to data lookup
+- Common in some LLM/reasoning competitions
+
+### When to Check
+
+Always do this check at the start of any competition with text/QA format.
