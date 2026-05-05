@@ -327,6 +327,19 @@ After submitting:
 
 ---
 
+## Advanced Patterns
+
+See [references/research/04-advanced-patterns.md](references/research/04-advanced-patterns.md) for:
+
+- **State Machine Execution Loop** — Fault-tolerant autonomous agent pattern
+- **Config-Driven Cronjob Design** — Swappable experiments without recreating jobs
+- **Supervisor Validation Duties** — Fraud detection and provenance verification
+- **Rank Averaging for AUC** — +0.001–0.005 improvement technique
+- **ONNX Model Validation** — Forbidden ops and error debugging
+- **Dependency Vendoring** — Offline package installation
+
+---
+
 ## Related Skills
 
 | Skill | Purpose |
