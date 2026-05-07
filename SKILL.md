@@ -338,6 +338,10 @@ See [references/research/04-advanced-patterns.md](references/research/04-advance
 - **ONNX Model Validation** — Forbidden ops and error debugging
 - **Dependency Vendoring** — Offline package installation
 
+See [references/research/05-environment-setup-patterns.md](references/research/05-environment-setup-patterns.md) for:
+
+- **Kaggle Environments Source Install** — Install latest envs from GitHub when PyPI is outdated
+
 ---
 
 ## Related Skills
