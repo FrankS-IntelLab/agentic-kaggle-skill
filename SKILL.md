@@ -342,6 +342,11 @@ See [references/research/05-environment-setup-patterns.md](references/research/0
 
 - **Kaggle Environments Source Install** — Install latest envs from GitHub when PyPI is outdated
 
+See [references/research/06-competition-types-submission-workflow.md](references/research/06-competition-types-submission-workflow.md) for:
+
+- **Competition Type Taxonomy** — Prediction/Adapter/ONNX and Pure Code/Mixed/Standard
+- **The `-k -v` Flag Requirement** — Prevent orphan submissions with notebook linkage
+
 ---
 
 ## Related Skills
