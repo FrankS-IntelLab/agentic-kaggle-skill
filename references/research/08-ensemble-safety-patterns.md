@@ -2,7 +2,11 @@
 
 > *When combining multiple solutions helps — and when it actively hurts your score.*
 
----
+---## Compliance Note
+
+Use these patterns only with competition-permitted data, code, models, notebooks, and external resources. Do not privately share competition code, data, predictions, prompts, logs, or results outside your Kaggle team. Do not tune directly against the public leaderboard through repeated submissions; use cross-validation and local holdout validation instead. Always check the specific competition rules before applying these workflows.
+
+
 
 ## The Ensemble Trap
 
@@ -85,7 +89,7 @@ Optimizing blend weights on the public LB can overfit to the evaluation subset. 
 **Mitigation**:
 - Use cross-validation to tune blend weights, not public LB scores
 - Limit the number of blend weight combinations you test
-- Reserve a private holdout set for final weight selection
+- Reserve a local validation/holdout split from training data for final weight selection
 
 ---
 
@@ -152,6 +156,7 @@ for i in range(len(corr_matrix.columns)):
 # Identify where each source is wrong
 errors = {}
 for name, preds in predictions.items():
+# ground_truth refers to validation labels ONLY - never use hidden test labels
     errors[name] = set(np.where(preds != ground_truth)[0])
 
 # Find overlapping errors

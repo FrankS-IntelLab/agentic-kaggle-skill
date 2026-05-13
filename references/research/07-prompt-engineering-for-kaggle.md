@@ -2,7 +2,11 @@
 
 > *How to write effective prompts when delegating work to AI agents during a competition.*
 
----
+---## Compliance Note
+
+Use these patterns only with competition-permitted data, code, models, notebooks, and external resources. Do not privately share competition code, data, predictions, prompts, logs, or results outside your Kaggle team. Do not tune directly against the public leaderboard through repeated submissions; use cross-validation and local holdout validation instead. Always check the specific competition rules before applying these workflows.
+
+
 
 ## When to Delegate vs Do It Yourself
 
