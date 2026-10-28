@@ -19,7 +19,7 @@ Do a tiny local smoke test first when possible: imports, path checks, one batch,
 2. Create a kernel folder with source code and `kernel-metadata.json`. Use `scripts/prepare_kaggle_kernel.py` for a starter folder.
 3. Read `information-sharing-policy.md` before making any Kaggle kernel, dataset, model, or downloaded output public.
 4. Set `competition_sources`, `dataset_sources`, `kernel_sources`, or `model_sources` in metadata so Kaggle can mount required inputs.
-5. Request an accelerator in metadata and/or push command when needed.
+5. Before GPU scheduling, fetch current allowance, usage, reservations, and reset time using the [GPU quota accounting rule in SKILL.md](../SKILL.md#kaggle-gpu-quota-accounting-avoid-the-sdk-duration-serialization-bug). Calculate from live SDK durations with `.total_seconds()`, report all three inputs and remaining hours, and treat missing or failed quota checks as unverified, not exhausted. Request an accelerator in metadata and/or push command when needed.
 6. Push and run the kernel.
 7. Poll the kernel status until complete or failed.
 8. Download output files.

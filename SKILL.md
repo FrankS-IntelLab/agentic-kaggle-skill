@@ -16,7 +16,7 @@ Treat every competition as a validation problem first and a modeling problem sec
 5. Build the simplest metric-correct baseline and produce out-of-fold (OOF) predictions plus a valid submission.
 6. Proactively plan a stronger architecture once the baseline is trustworthy: diverse model families, feature/embedding producers, augmentation/pseudo-label/distillation stages, calibration/postprocessing, and an ensemble or stacker.
 7. Iterate with validation gates: test one meaningful change at a time when possible, but launch several independent producer notebooks in parallel when they create diverse artifacts that can be compared by OOF score or ensemble diversity.
-8. Offload heavy training, inference, embedding generation, image/text experiments, or memory-risky jobs to Kaggle notebooks/scripts when local compute may OOM or take too long.
+8. Offload heavy training, inference, embedding generation, image/text experiments, or memory-risky jobs to Kaggle notebooks/scripts when local compute may OOM or take too long. Before GPU scheduling or availability claims, fetch fresh quota and apply the GPU quota accounting rule below.
 9. For sophisticated architectures, split work into a small Kaggle pipeline: run several independent producer notebooks/scripts first, save each useful producer output as a private Kaggle dataset, then run one consumer notebook/script that attaches those datasets and creates the final OOF/test/submission outputs. When a producer trains a model, its checkpoint, tokenizer/config, fold metadata, OOF/test predictions, and manifest should be exported as a Kaggle dataset; downstream notebooks load the model from `/kaggle/input/...`.
 10. Submit the final submission-producing artifact to Kaggle for scoring and retrieve the resulting submission status/score.
 11. If Kaggle returns a code-competition error or vague scoring failure, enter the debugging loop: retrieve available logs, classify likely failure mode, patch defensively, rerun the final kernel, resubmit, and repeat until scored or concretely blocked.
@@ -78,6 +78,46 @@ When the solution has multiple heavy stages, keep the remote graph shallow and i
 - Run one final consumer notebook/script that attaches the produced datasets, reads their artifacts, writes the final OOF, test predictions, blend/stack report, and submission, then submit that final artifact/kernel to Kaggle for scoring.
 - Use `kagglehub` inside Python when it is more convenient to download datasets, competition files, notebook outputs, or upload dataset versions programmatically.
 
+## Kaggle GPU quota accounting: avoid the SDK duration serialization bug
+
+Never calculate GPU availability using `str(response)`, `json.loads(str(response))`, serialized SDK duration strings, or `timedelta.seconds`.
+
+Kaggle SDK serialization can drop whole days: 30 hours becomes 6 hours. This previously caused an incorrect claim that GPU quota was exhausted.
+
+Read the live SDK duration objects and use `.total_seconds()` for each field:
+
+```python
+allowed_seconds = allowed.total_seconds()
+used_seconds = used.total_seconds()
+reserved_seconds = reserved.total_seconds()
+remaining_seconds = allowed_seconds - used_seconds - reserved_seconds
+remaining_hours = remaining_seconds / 3600
+```
+
+Fetch the current allowance, usage, reservations, and reset time each time. Do not hard-code the weekly allowance. Report all three inputs alongside the calculated remaining hours and reset time.
+
+If SDK values conflict with the Kaggle UI or look inconsistent, verify using authenticated:
+
+```text
+GET https://www.kaggle.com/api/v1/kernels/quota
+```
+
+Alternatively:
+
+```text
+GET https://api.kaggle.com/v1/kernels/quota
+```
+
+For raw duration objects, convert with:
+
+```python
+seconds = duration["seconds"] + duration.get("nanos", 0) / 1e9
+```
+
+Preserve whole days and fractional seconds throughout the calculation. Missing fields or request failures mean quota is unverified, not zero.
+
+Regression check: an allowance of 30 hours, usage of 7.5 hours, and reservations of 2 hours must yield 20.5 hours remaining. Never declare quota exhausted based on lossy SDK text.
+
 ## Definition Of Done
 
 Do not stop at a plan, scaffold, trained model, notebook run, downloaded output, or local validation score. Continue until one of these is true:
@@ -85,6 +125,8 @@ Do not stop at a plan, scaffold, trained model, notebook run, downloaded output,
 - A competition submission has been sent to Kaggle, Kaggle has processed it, and the public score or submission status has been retrieved and recorded.
 - A code-competition final notebook/kernel has consumed all required producer artifacts, has been submitted with its kernel/version reference, and the resulting submission status/score has been retrieved and recorded.
 - A concrete external blocker prevents scoring: missing Kaggle credentials, rules not accepted, quota exhausted after retry attempts, competition closed, scoring disabled, required manual UI-only action, unavailable kernel version, or Kaggle service failure. Record the exact blocker and the next command/action needed.
+
+GPU quota exhaustion is a blocker only after verification using the GPU quota accounting rule above. Unverified quota must not be reported as exhausted.
 
 ## Validation Choices
 
